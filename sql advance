@@ -1,0 +1,160 @@
+Advanced SQL Queries
+Project Task Details
+sql
+Copy code
+SELECT p.ProjectName, 
+       t.TaskName, 
+       e.EmployeeName, 
+       t.HoursWorked, 
+       t.Status
+FROM Tasks t
+JOIN Projects p ON t.ProjectID = p.ProjectID
+JOIN Employees e ON t.AssignedTo = e.EmployeeID
+ORDER BY p.ProjectName, t.TaskName;
+Employee Workload
+sql
+Copy code
+SELECT e.EmployeeName, 
+       COUNT(t.TaskID) AS TaskCount, 
+       SUM(t.HoursWorked) AS TotalHours
+FROM Employees e
+LEFT JOIN Tasks t ON e.EmployeeID = t.AssignedTo
+GROUP BY e.EmployeeName
+ORDER BY TotalHours DESC;
+Views
+View for Project Summary
+sql
+Copy code
+CREATE VIEW ProjectSummary AS
+SELECT p.ProjectName, 
+       COUNT(t.TaskID) AS TotalTasks, 
+       SUM(CASE WHEN t.Status = 'Completed' THEN 1 ELSE 0 END) AS CompletedTasks,
+       (SUM(CASE WHEN t.Status = 'Completed' THEN 1 ELSE 0 END) / COUNT(t.TaskID)) * 100 AS CompletionRate
+FROM Projects p
+LEFT JOIN Tasks t ON p.ProjectID = t.ProjectID
+GROUP BY p.ProjectID, p.ProjectName;
+View for Employee Task Allocation
+sql
+Copy code
+CREATE VIEW EmployeeTaskAllocation AS
+SELECT e.EmployeeName, 
+       t.TaskName, 
+       t.HoursWorked, 
+       t.Status
+FROM Employees e
+LEFT JOIN Tasks t ON e.EmployeeID = t.AssignedTo
+ORDER BY e.EmployeeName, t.TaskName;
+Stored Procedures
+Stored Procedure for Adding a New Project
+sql
+Copy code
+DELIMITER //
+
+CREATE PROCEDURE AddNewProject(
+    IN project_name VARCHAR(255),
+    IN start_date DATE,
+    IN end_date DATE,
+    IN status VARCHAR(50)
+)
+BEGIN
+    INSERT INTO Projects (ProjectName, StartDate, EndDate, Status) 
+    VALUES (project_name, start_date, end_date, status);
+END //
+
+DELIMITER ;
+Stored Procedure for Assigning a Task
+sql
+Copy code
+DELIMITER //
+
+CREATE PROCEDURE AssignTask(
+    IN project_id INT,
+    IN task_name VARCHAR(255),
+    IN assigned_to INT,
+    IN hours_worked FLOAT,
+    IN status VARCHAR(50)
+)
+BEGIN
+    INSERT INTO Tasks (ProjectID, TaskName, AssignedTo, HoursWorked, Status) 
+    VALUES (project_id, task_name, assigned_to, hours_worked, status);
+END //
+
+DELIMITER ;
+Functions
+Function to Calculate Total Hours Worked by an Employee
+sql
+Copy code
+DELIMITER //
+
+CREATE FUNCTION TotalHoursWorked(employee_id INT) 
+RETURNS FLOAT
+DETERMINISTIC
+BEGIN
+    DECLARE total_hours FLOAT;
+    SELECT SUM(HoursWorked) INTO total_hours 
+    FROM Tasks 
+    WHERE AssignedTo = employee_id;
+    RETURN IFNULL(total_hours, 0);
+END //
+
+DELIMITER ;
+Function to Get Project Completion Rate
+sql
+Copy code
+DELIMITER //
+
+CREATE FUNCTION ProjectCompletionRate(project_id INT) 
+RETURNS FLOAT
+DETERMINISTIC
+BEGIN
+    DECLARE total_tasks INT;
+    DECLARE completed_tasks INT;
+    DECLARE completion_rate FLOAT;
+    
+    SELECT COUNT(TaskID) INTO total_tasks 
+    FROM Tasks 
+    WHERE ProjectID = project_id;
+    
+    SELECT COUNT(TaskID) INTO completed_tasks 
+    FROM Tasks 
+    WHERE ProjectID = project_id AND Status = 'Completed';
+    
+    SET completion_rate = (completed_tasks / total_tasks) * 100;
+    RETURN IFNULL(completion_rate, 0);
+END //
+
+DELIMITER ;
+Sample Usage of Stored Procedures and Functions
+sql
+Copy code
+-- Adding a new project
+CALL AddNewProject('Project Gamma', '2024-08-01', '2025-01-01', 'Not Started');
+
+-- Assigning a new task
+CALL AssignTask(3, 'Task 5', 1, 8, 'Not Started');
+
+-- Calculating total hours worked by an employee
+SELECT TotalHoursWorked(1) AS TotalHours;
+
+-- Getting project completion rate
+SELECT ProjectCompletionRate(1) AS CompletionRate;
+Triggers
+Trigger to Update Project Status When All Tasks Are Completed
+sql
+Copy code
+DELIMITER //
+
+CREATE TRIGGER UpdateProjectStatus
+AFTER UPDATE ON Tasks
+FOR EACH ROW
+BEGIN
+    IF NEW.Status = 'Completed' THEN
+        IF (SELECT COUNT(*) FROM Tasks WHERE ProjectID = NEW.ProjectID AND Status <> 'Completed') = 0 THEN
+            UPDATE Projects
+            SET Status = 'Completed'
+            WHERE ProjectID = NEW.ProjectID;
+        END IF;
+    END IF;
+END //
+
+DELIMITER ;
