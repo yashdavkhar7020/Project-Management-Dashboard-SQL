@@ -1,6 +1,5 @@
 Database Schema
-sql
-Copy code
+
 -- Create the database
 CREATE DATABASE project_management_dashboard;
 
@@ -47,8 +46,7 @@ CREATE TABLE TimeLogs (
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
 Sample Data Insertion
-sql
-Copy code
+
 -- Insert sample data into Projects table
 INSERT INTO Projects (ProjectName, StartDate, EndDate, Status) VALUES
 ('Project Alpha', '2024-01-01', '2024-06-01', 'In Progress'),
@@ -75,10 +73,7 @@ INSERT INTO TimeLogs (TaskID, EmployeeID, HoursWorked, Date) VALUES
 (3, 1, 10, '2024-04-01'),
 (3, 1, 10, '2024-04-02'),
 (4, 3, 15, '2024-05-01');
-SQL Queries
-Project Progress
-sql
-Copy code
+
 SELECT ProjectID, 
        ProjectName, 
        SUM(CASE WHEN Status = 'Completed' THEN 1 ELSE 0 END) AS CompletedTasks,
@@ -86,9 +81,7 @@ SELECT ProjectID,
        (SUM(CASE WHEN Status = 'Completed' THEN 1 ELSE 0 END) / COUNT(TaskID)) * 100 AS CompletionRate
 FROM Tasks
 GROUP BY ProjectID, ProjectName;
-Resource Allocation
-sql
-Copy code
+
 SELECT EmployeeID, 
        EmployeeName, 
        COUNT(TaskID) AS AssignedTasks,
@@ -97,8 +90,7 @@ FROM Tasks
 JOIN Employees ON Tasks.AssignedTo = Employees.EmployeeID
 GROUP BY EmployeeID, EmployeeName;
 Automated Alerts (Trigger)
-sql
-Copy code
+
 CREATE TRIGGER ProjectStatusUpdate
 AFTER UPDATE ON Tasks
 FOR EACH ROW
