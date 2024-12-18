@@ -1,7 +1,6 @@
 Advanced SQL Queries
 Project Task Details
-sql
-Copy code
+
 SELECT p.ProjectName, 
        t.TaskName, 
        e.EmployeeName, 
@@ -12,8 +11,8 @@ JOIN Projects p ON t.ProjectID = p.ProjectID
 JOIN Employees e ON t.AssignedTo = e.EmployeeID
 ORDER BY p.ProjectName, t.TaskName;
 Employee Workload
-sql
-Copy code
+
+
 SELECT e.EmployeeName, 
        COUNT(t.TaskID) AS TaskCount, 
        SUM(t.HoursWorked) AS TotalHours
@@ -21,10 +20,11 @@ FROM Employees e
 LEFT JOIN Tasks t ON e.EmployeeID = t.AssignedTo
 GROUP BY e.EmployeeName
 ORDER BY TotalHours DESC;
+
 Views
 View for Project Summary
-sql
-Copy code
+
+
 CREATE VIEW ProjectSummary AS
 SELECT p.ProjectName, 
        COUNT(t.TaskID) AS TotalTasks, 
@@ -33,9 +33,10 @@ SELECT p.ProjectName,
 FROM Projects p
 LEFT JOIN Tasks t ON p.ProjectID = t.ProjectID
 GROUP BY p.ProjectID, p.ProjectName;
+
 View for Employee Task Allocation
-sql
-Copy code
+
+
 CREATE VIEW EmployeeTaskAllocation AS
 SELECT e.EmployeeName, 
        t.TaskName, 
@@ -44,10 +45,11 @@ SELECT e.EmployeeName,
 FROM Employees e
 LEFT JOIN Tasks t ON e.EmployeeID = t.AssignedTo
 ORDER BY e.EmployeeName, t.TaskName;
+
+
 Stored Procedures
 Stored Procedure for Adding a New Project
-sql
-Copy code
+
 DELIMITER //
 
 CREATE PROCEDURE AddNewProject(
@@ -63,8 +65,7 @@ END //
 
 DELIMITER ;
 Stored Procedure for Assigning a Task
-sql
-Copy code
+
 DELIMITER //
 
 CREATE PROCEDURE AssignTask(
@@ -80,10 +81,11 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
 Functions
 Function to Calculate Total Hours Worked by an Employee
-sql
-Copy code
+
 DELIMITER //
 
 CREATE FUNCTION TotalHoursWorked(employee_id INT) 
@@ -98,9 +100,10 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
 Function to Get Project Completion Rate
-sql
-Copy code
+
 DELIMITER //
 
 CREATE FUNCTION ProjectCompletionRate(project_id INT) 
@@ -124,9 +127,10 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
 Sample Usage of Stored Procedures and Functions
-sql
-Copy code
+
 -- Adding a new project
 CALL AddNewProject('Project Gamma', '2024-08-01', '2025-01-01', 'Not Started');
 
@@ -138,10 +142,11 @@ SELECT TotalHoursWorked(1) AS TotalHours;
 
 -- Getting project completion rate
 SELECT ProjectCompletionRate(1) AS CompletionRate;
+
+
 Triggers
 Trigger to Update Project Status When All Tasks Are Completed
-sql
-Copy code
+
 DELIMITER //
 
 CREATE TRIGGER UpdateProjectStatus
