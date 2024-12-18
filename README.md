@@ -9,43 +9,6 @@ Automated Alerts: Set up triggers for real-time updates and notifications.
 Database Schema
 The Project Management Dashboard utilizes the following database schema:
 
-Tables
-Projects Table
-
-Column	Type	Description
-ProjectID	INT	Primary Key
-ProjectName	VARCHAR(255)	Name of the project
-StartDate	DATE	Project start date
-EndDate	DATE	Project end date
-Status	VARCHAR(50)	Current status of the project
-Tasks Table
-
-Column	Type	Description
-TaskID	INT	Primary Key
-ProjectID	INT	Foreign Key referencing Projects
-TaskName	VARCHAR(255)	Name of the task
-AssignedTo	INT	Foreign Key referencing Employees
-HoursWorked	FLOAT	Hours worked on the task
-Status	VARCHAR(50)	Current status of the task
-Employees Table
-
-Column	Type	Description
-EmployeeID	INT	Primary Key
-EmployeeName	VARCHAR(255)	Name of the employee
-Role	VARCHAR(50)	Role of the employee
-Availability	VARCHAR(50)	Availability status of employee
-TimeLogs Table
-
-Column	Type	Description
-TimeLogID	INT	Primary Key
-TaskID	INT	Foreign Key referencing Tasks
-EmployeeID	INT	Foreign Key referencing Employees
-HoursWorked	FLOAT	Hours worked in the time log
-Date	DATE	Date of the time log entry
-Getting Started
-Prerequisites
-MySQL or any SQL-based database system
-SQL client tool (e.g., MySQL Workbench, phpMyAdmin)
 
 
 
@@ -100,22 +63,7 @@ Getting Started
 Prerequisites
 MySQL or any SQL-based database system
 SQL client tool (e.g., MySQL Workbench, phpMyAdmin)
-Installation
-Clone the repository
-bash
-Copy code
-git clone https://github.com/yourusername/project-management-dashboard.git
-cd project-management-dashboard
-Set up the database
 
-Create a new database:
-sql
-Copy code
-CREATE DATABASE project_management_dashboard;
-Import the schema and sample data:
-bash
-Copy code
-mysql -u yourusername -p project_management_dashboard < schema.sql
 Usage
 Monitor Projects: Use the Project Progress query to get an overview of the project completion rates.
 Allocate Resources: Use the Resource Allocation query to assign tasks to team members based on their availability.
