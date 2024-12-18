@@ -1,5 +1,5 @@
 Advanced SQL Queries
-Project Task Details
+-----Project Task Details
 
 SELECT p.ProjectName, 
        t.TaskName, 
@@ -10,7 +10,8 @@ FROM Tasks t
 JOIN Projects p ON t.ProjectID = p.ProjectID
 JOIN Employees e ON t.AssignedTo = e.EmployeeID
 ORDER BY p.ProjectName, t.TaskName;
-Employee Workload
+
+-------Employee Workload
 
 
 SELECT e.EmployeeName, 
@@ -21,8 +22,8 @@ LEFT JOIN Tasks t ON e.EmployeeID = t.AssignedTo
 GROUP BY e.EmployeeName
 ORDER BY TotalHours DESC;
 
-Views
-View for Project Summary
+-----Views
+-----View for Project Summary
 
 
 CREATE VIEW ProjectSummary AS
@@ -34,7 +35,7 @@ FROM Projects p
 LEFT JOIN Tasks t ON p.ProjectID = t.ProjectID
 GROUP BY p.ProjectID, p.ProjectName;
 
-View for Employee Task Allocation
+------View for Employee Task Allocation
 
 
 CREATE VIEW EmployeeTaskAllocation AS
@@ -47,8 +48,8 @@ LEFT JOIN Tasks t ON e.EmployeeID = t.AssignedTo
 ORDER BY e.EmployeeName, t.TaskName;
 
 
-Stored Procedures
-Stored Procedure for Adding a New Project
+------Stored Procedures
+------Stored Procedure for Adding a New Project
 
 DELIMITER //
 
@@ -64,7 +65,8 @@ BEGIN
 END //
 
 DELIMITER ;
-Stored Procedure for Assigning a Task
+
+----------Stored Procedure for Assigning a Task
 
 DELIMITER //
 
@@ -83,8 +85,8 @@ END //
 DELIMITER ;
 
 
-Functions
-Function to Calculate Total Hours Worked by an Employee
+-------Functions
+-------Function to Calculate Total Hours Worked by an Employee
 
 DELIMITER //
 
@@ -102,7 +104,7 @@ END //
 DELIMITER ;
 
 
-Function to Get Project Completion Rate
+----------Function to Get Project Completion Rate
 
 DELIMITER //
 
@@ -129,7 +131,7 @@ END //
 DELIMITER ;
 
 
-Sample Usage of Stored Procedures and Functions
+--------Sample Usage of Stored Procedures and Functions
 
 -- Adding a new project
 CALL AddNewProject('Project Gamma', '2024-08-01', '2025-01-01', 'Not Started');
@@ -144,8 +146,8 @@ SELECT TotalHoursWorked(1) AS TotalHours;
 SELECT ProjectCompletionRate(1) AS CompletionRate;
 
 
-Triggers
-Trigger to Update Project Status When All Tasks Are Completed
+--------Triggers
+--------Trigger to Update Project Status When All Tasks Are Completed
 
 DELIMITER //
 
